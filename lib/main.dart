@@ -57,6 +57,17 @@ class _HomeScreenState extends State<HomeScreen> {
       branch: 'CSE',
     ),
   ];
+void deleteStudent(Student student) {
+  setState(() {
+    students.remove(student);
+  });
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Student deleted successfully'),
+    ),
+  );
+}
 
   void addStudent() {
     if (_formKey.currentState!.validate()) {
@@ -244,12 +255,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     subtitle: Text(
                       '${student.rollNumber} • ${student.branch}',
                     ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        editStudent(student);
-                      },
-                    ),
+                   trailing: Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    IconButton(
+      icon: const Icon(Icons.edit),
+      onPressed: () {
+        editStudent(student);
+      },
+    ),
+    IconButton(
+      icon: const Icon(Icons.delete),
+      onPressed: () {
+        deleteStudent(student);
+      },
+    ),
+  ],
+),
                   ),
                 ),
               ),
