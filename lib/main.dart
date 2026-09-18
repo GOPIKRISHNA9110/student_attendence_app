@@ -48,6 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final nameController = TextEditingController();
   final rollController = TextEditingController();
   final branchController = TextEditingController();
+  final searchController = TextEditingController();
+  String searchText = '';
+  
 
   final List<Student> students = [
     Student(
@@ -268,9 +271,32 @@ void deleteStudent(Student student) {
                 ),
               ),
 
+              
               const SizedBox(height: 10),
 
-              ...students.map(
+TextField(
+  controller: searchController,
+  decoration: const InputDecoration(
+    labelText: 'Search Student',
+    prefixIcon: Icon(Icons.search),
+    border: OutlineInputBorder(),
+  ),
+  onChanged: (value) {
+    setState(() {
+      searchText = value.toLowerCase();
+    });
+  },
+),
+
+const SizedBox(height: 15),
+
+              ...students
+    .where(
+      (student) =>
+          student.name.toLowerCase().contains(searchText) ||
+          student.rollNumber.toLowerCase().contains(searchText),
+    )
+    .map(
                 (student) => Card(
                   child: ListTile(
                     title: Text(student.name),
