@@ -149,27 +149,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 15),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isPresent = true;
-                    });
-                  },
-                  child: const Text('Present'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isPresent = false;
-                    });
-                  },
-                  child: const Text('Absent'),
-                ),
-              ],
-            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isPresent = true;
+                      });
+                    },
+                    child: const Text('Present'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isPresent = false;
+                      });
+                    },
+                    child: const Text('Absent'),
+                  ),
+                ],
+              ),
 
               const SizedBox(height: 15),
 
