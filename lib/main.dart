@@ -27,6 +27,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isPresent = false;
 
+  final List<String> students = [
+    'Gopi Krishna - CSE001',
+    'Rahul - CSE002',
+    'Suresh - CSE003',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +105,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
 
-            const SizedBox(height: 25),
+            const SizedBox(height: 20),
+
+            Center(
+              child: Text(
+                isPresent
+                    ? 'Attendance: Present'
+                    : 'Attendance: Absent',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 15),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -113,6 +133,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: const Text('Absent'),
                 ),
               ],
+            ),
+
+            const SizedBox(height: 20),
+
+            const Text(
+              'Student List',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Expanded(
+              child: ListView.builder(
+                itemCount: students.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(students[index]),
+                      subtitle: const Text('Attendance Record'),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
