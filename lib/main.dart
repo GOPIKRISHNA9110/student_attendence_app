@@ -41,6 +41,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  final nameController = TextEditingController();
+  final rollController = TextEditingController();
+  final branchController = TextEditingController();
+
   final List<Student> students = [
     Student(
       name: 'Gopi Krishna',
@@ -65,6 +69,30 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void addStudent() {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        students.add(
+          Student(
+            name: nameController.text,
+            rollNumber: rollController.text,
+            branch: branchController.text,
+          ),
+        );
+      });
+
+      nameController.clear();
+      rollController.clear();
+      branchController.clear();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Student added successfully'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,42 +101,56 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(15),
-              child: const Text(
-                'Student Details',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(15),
+                child: const Text(
+                  'Student Details',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
 
               const SizedBox(height: 20),
 
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Student Name',
-                border: OutlineInputBorder(),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Student Name',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter student name';
+                  }
+                  return null;
+                },
               ),
-            ),
-
-            const SizedBox(height: 15),
-
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Roll Number',
-                border: OutlineInputBorder(),
-              ),
-            ),
 
             const SizedBox(height: 15),
 
               TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Roll Number',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter roll number';
+                  }
+                  return null;
+                },
+              ),
+
+            const SizedBox(height: 15),
+
+              TextFormField(
+                controller: branchController,
                 decoration: const InputDecoration(
                   labelText: 'Branch',
                   border: OutlineInputBorder(),
@@ -119,71 +161,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                   return null;
                 },
-              ),
-
-              const SizedBox(height: 20),
-
-              Center(
-                child: Text(
-                  isPresent
-                      ? 'Attendance: Present'
-                      : 'Attendance: Absent',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 15),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        isPresent = true;
-                      });
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Student marked Present'),
-                        ),
-                      );
-                    },
-                    child: const Text('Present'),
-                  ),
-
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        isPresent = false;
-                      });
-
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Attendance'),
-                            content: const Text(
-                              'Student has been marked Absent.',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: const Text('Absent'),
-                  ),
-                ],
               ),
 
               const SizedBox(height: 20),
@@ -205,29 +182,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     subtitle: Text(
                       '${student.rollNumber} • ${student.branch}',
                     ),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           student.isPresent ? 'Present' : 'Absent',
                         ),
-                        const SizedBox(height: 5),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                markAttendance(student, true);
-                              },
-                              icon: const Icon(Icons.check),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                markAttendance(student, false);
-                              },
-                              icon: const Icon(Icons.close),
-                            ),
-                          ],
+                        IconButton(
+                          onPressed: () {
+                            markAttendance(student, true);
+                          },
+                          icon: const Icon(Icons.check),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            markAttendance(student, false);
+                          },
+                          icon: const Icon(Icons.close),
                         ),
                       ],
                     ),
@@ -236,23 +207,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               const SizedBox(height: 20),
-
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Student details are valid'),
-                        ),
-                      );
-                    }
-                  },
-                  child: const Text('Submit Student'),
-                ),
-              ),
-
-              const SizedBox(height: 10),
 
               Center(
                 child: ElevatedButton(
@@ -299,7 +253,9 @@ class AttendanceScreen extends StatelessWidget {
           return Card(
             child: ListTile(
               title: Text(student.name),
-              subtitle: Text(student.rollNumber),
+              subtitle: Text(
+                '${student.rollNumber} • ${student.branch}',
+              ),
               trailing: Text(
                 student.isPresent ? 'Present' : 'Absent',
               ),
