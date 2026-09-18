@@ -56,18 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       rollNumber: 'CSE002',
       branch: 'CSE',
     ),
-    Student(
-      name: 'Suresh',
-      rollNumber: 'CSE003',
-      branch: 'CSE',
-    ),
   ];
-
-  void markAttendance(Student student, bool present) {
-    setState(() {
-      student.isPresent = present;
-    });
-  }
 
   void addStudent() {
     if (_formKey.currentState!.validate()) {
@@ -93,6 +82,74 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void editStudent(Student student) {
+    nameController.text = student.name;
+    rollController.text = student.rollNumber;
+    branchController.text = student.branch;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Edit Student'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Student Name',
+                ),
+              ),
+              TextField(
+                controller: rollController,
+                decoration: const InputDecoration(
+                  labelText: 'Roll Number',
+                ),
+              ),
+              TextField(
+                controller: branchController,
+                decoration: const InputDecoration(
+                  labelText: 'Branch',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  student.name = nameController.text;
+                  student.rollNumber = rollController.text;
+                  student.branch = branchController.text;
+                });
+
+                nameController.clear();
+                rollController.clear();
+                branchController.clear();
+
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Student updated successfully'),
+                  ),
+                );
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,21 +162,18 @@ class _HomeScreenState extends State<HomeScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(15),
-                child: const Text(
-                  'Student Details',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+              const Text(
+                'Add Student',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
 
               const SizedBox(height: 20),
 
               TextFormField(
+                controller: nameController,
                 decoration: const InputDecoration(
                   labelText: 'Student Name',
                   border: OutlineInputBorder(),
@@ -132,9 +186,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
 
-            const SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               TextFormField(
+                controller: rollController,
                 decoration: const InputDecoration(
                   labelText: 'Roll Number',
                   border: OutlineInputBorder(),
@@ -147,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
 
-            const SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               TextFormField(
                 controller: branchController,
@@ -163,7 +218,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
+
+              ElevatedButton(
+                onPressed: addStudent,
+                child: const Text('Add Student'),
+              ),
+
+              const SizedBox(height: 25),
 
               const Text(
                 'Student List',
@@ -182,86 +244,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     subtitle: Text(
                       '${student.rollNumber} • ${student.branch}',
                     ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          student.isPresent ? 'Present' : 'Absent',
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            markAttendance(student, true);
-                          },
-                          icon: const Icon(Icons.check),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            markAttendance(student, false);
-                          },
-                          icon: const Icon(Icons.close),
-                        ),
-                      ],
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        editStudent(student);
+                      },
                     ),
                   ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AttendanceScreen(
-                          students: students,
-                        ),
-                      ),
-                    );
-                  },
-                  child: const Text('View Attendance'),
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class AttendanceScreen extends StatelessWidget {
-  final List<Student> students;
-
-  const AttendanceScreen({
-    super.key,
-    required this.students,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Attendance'),
-      ),
-      body: ListView.builder(
-        itemCount: students.length,
-        itemBuilder: (context, index) {
-          final student = students[index];
-
-          return Card(
-            child: ListTile(
-              title: Text(student.name),
-              subtitle: Text(
-                '${student.rollNumber} • ${student.branch}',
-              ),
-              trailing: Text(
-                student.isPresent ? 'Present' : 'Absent',
-              ),
-            ),
-          );
-        },
       ),
     );
   }
