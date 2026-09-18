@@ -41,19 +41,24 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Name:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  'Gopi Krishna',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text(
+                        'Name:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Text(
+                        'Gopi Krishna',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
 
             const SizedBox(height: 15),
 
@@ -83,6 +88,23 @@ class HomeScreen extends StatelessWidget {
                       Text(
                         'CSE',
                         style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: const Text('Present'),
+                      ),
+
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: const Text('Absent'),
                       ),
                     ],
                   ),
