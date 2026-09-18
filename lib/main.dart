@@ -50,6 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final branchController = TextEditingController();
   final searchController = TextEditingController();
   String searchText = '';
+  final List<String> branches = [
+  'CSE',
+  'ECE',
+  'EEE',
+  'MECH',
+  'CIVIL',
+];
   
 
   final List<Student> students = [
@@ -143,12 +150,23 @@ void deleteStudent(Student student) {
                   labelText: 'Roll Number',
                 ),
               ),
-              TextField(
-                controller: branchController,
-                decoration: const InputDecoration(
-                  labelText: 'Branch',
-                ),
-              ),
+             DropdownButtonFormField<String>(
+  decoration: const InputDecoration(
+    labelText: 'Branch',
+  ),
+  value: branchController.text.isEmpty
+      ? null
+      : branchController.text,
+  items: branches.map((branch) {
+    return DropdownMenuItem(
+      value: branch,
+      child: Text(branch),
+    );
+  }).toList(),
+  onChanged: (value) {
+    branchController.text = value!;
+  },
+),
             ],
           ),
           actions: [
@@ -240,19 +258,32 @@ void deleteStudent(Student student) {
 
               const SizedBox(height: 15),
 
-              TextFormField(
-                controller: branchController,
-                decoration: const InputDecoration(
-                  labelText: 'Branch',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter branch';
-                  }
-                  return null;
-                },
-              ),
+             DropdownButtonFormField<String>(
+  decoration: const InputDecoration(
+    labelText: 'Branch',
+    border: OutlineInputBorder(),
+  ),
+  value: branchController.text.isEmpty
+      ? null
+      : branchController.text,
+  items: branches.map((branch) {
+    return DropdownMenuItem(
+      value: branch,
+      child: Text(branch),
+    );
+  }).toList(),
+  onChanged: (value) {
+    setState(() {
+      branchController.text = value!;
+    });
+  },
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select branch';
+    }
+    return null;
+  },
+),
 
               const SizedBox(height: 15),
 
