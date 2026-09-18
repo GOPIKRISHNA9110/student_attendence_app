@@ -331,9 +331,24 @@ const SizedBox(height: 15),
                 (student) => Card(
                   child: ListTile(
                     title: Text(student.name),
-                   subtitle: Text(
-  '${student.rollNumber} • ${student.branch}\n'
-  'Attendance: ${attendancePercentage(student).toStringAsFixed(1)}%',
+                 subtitle: Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text('${student.rollNumber} • ${student.branch}'),
+    Text(
+      'Present: ${student.presentDays} / ${student.totalDays} days',
+    ),
+    Text(
+      'Attendance: ${attendancePercentage(student).toStringAsFixed(1)}%',
+    ),
+   Text(
+  student.isPresent ? 'Status: Present' : 'Status: Absent',
+  style: TextStyle(
+    fontWeight: FontWeight.bold,
+    color: student.isPresent ? Colors.green : Colors.red,
+  ),
+),
+  ],
 ),
                   trailing: Row(
   mainAxisSize: MainAxisSize.min,
