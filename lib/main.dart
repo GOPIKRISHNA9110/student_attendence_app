@@ -73,18 +73,21 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Branch:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  'CSE',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text(
+                        'Branch:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Text(
+                        'CSE',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
