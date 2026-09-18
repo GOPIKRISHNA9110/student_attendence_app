@@ -1,85 +1,400 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const StudentAttendanceApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Student {
+  String name;
+  String rollNumber;
+  String branch;
+  bool isPresent;
+  int presentDays;
+  int totalDays;
+
+  Student({
+  required this.name,
+  required this.rollNumber,
+  required this.branch,
+  this.isPresent = false,
+  this.presentDays = 0,
+  this.totalDays = 0,
+});
+}
+
+class StudentAttendanceApp extends StatelessWidget {
+  const StudentAttendanceApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Counter App',
-      home: const CounterPage(),
+      title: 'Student Attendance App',
+      home: const HomeScreen(),
     );
   }
 }
 
-class CounterPage extends StatefulWidget {
-  const CounterPage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<CounterPage> createState() => _CounterPageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _CounterPageState extends State<CounterPage> {
-  int count = 0;
+class _HomeScreenState extends State<HomeScreen> {
 
-  void increaseCount() {
-    setState(() {
-      count++;
-    });
+  final _formKey = GlobalKey<FormState>();
+
+  final nameController = TextEditingController();
+  final rollController = TextEditingController();
+  final branchController = TextEditingController();
+  final searchController = TextEditingController();
+  String searchText = '';
+  final List<String> branches = [
+  'CSE',
+  'ECE',
+  'EEE',
+  'MECH',
+  'CIVIL',
+];
+  
+
+  final List<Student> students = [
+    Student(
+      name: 'Gopi Krishna',
+      rollNumber: 'CSE001',
+      branch: 'CSE',
+    ),
+    Student(
+      name: 'Rahul',
+      rollNumber: 'CSE002',
+      branch: 'CSE',
+    ),
+  ];
+ double attendancePercentage(Student student) {
+  if (student.totalDays == 0) {
+    return 0;
   }
 
-  void decreaseCount() {
-    setState(() {
-      if (count > 0) {
-        count--;
-      }
-    });
+  return (student.presentDays / student.totalDays) * 100;
+}
+void markAttendance(Student student, bool present) {
+  setState(() {
+    student.totalDays++;
+
+    if (present) {
+      student.presentDays++;
+    }
+
+    student.isPresent = present;
+  });
+}
+void deleteStudent(Student student) {
+  setState(() {
+    students.remove(student);
+  });
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Student deleted successfully'),
+    ),
+  );
+}
+
+  void addStudent() {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        students.add(
+          Student(
+            name: nameController.text,
+            rollNumber: rollController.text,
+            branch: branchController.text,
+          ),
+        );
+      });
+
+      nameController.clear();
+      rollController.clear();
+      branchController.clear();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Student added successfully'),
+        ),
+      );
+    }
+  }
+
+  void editStudent(Student student) {
+    nameController.text = student.name;
+    rollController.text = student.rollNumber;
+    branchController.text = student.branch;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Edit Student'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Student Name',
+                ),
+              ),
+              TextField(
+                controller: rollController,
+                decoration: const InputDecoration(
+                  labelText: 'Roll Number',
+                ),
+              ),
+             DropdownButtonFormField<String>(
+  decoration: const InputDecoration(
+    labelText: 'Branch',
+  ),
+  value: branchController.text.isEmpty
+      ? null
+      : branchController.text,
+  items: branches.map((branch) {
+    return DropdownMenuItem(
+      value: branch,
+      child: Text(branch),
+    );
+  }).toList(),
+  onChanged: (value) {
+    branchController.text = value!;
+  },
+),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  student.name = nameController.text;
+                  student.rollNumber = rollController.text;
+                  student.branch = branchController.text;
+                });
+
+                nameController.clear();
+                rollController.clear();
+                branchController.clear();
+
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Student updated successfully'),
+                  ),
+                );
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Counter App'),
+        title: const Text('Student Attendance App'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Count',
-              style: TextStyle(fontSize: 24),
-            ),
-            Text(
-              '$count',
-              style: const TextStyle(
-                fontSize: 50,
-                fontWeight: FontWeight.bold,
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              const Text(
+                'Add Student',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: decreaseCount,
-                  child: const Text('−'),
+
+              const SizedBox(height: 20),
+
+              TextFormField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Student Name',
+                  border: OutlineInputBorder(),
                 ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: increaseCount,
-                  child: const Text('+'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter student name';
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 15),
+
+              TextFormField(
+                controller: rollController,
+                decoration: const InputDecoration(
+                  labelText: 'Roll Number',
+                  border: OutlineInputBorder(),
                 ),
-              ],
-            ),
-          ],
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter roll number';
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 15),
+
+             DropdownButtonFormField<String>(
+  decoration: const InputDecoration(
+    labelText: 'Branch',
+    border: OutlineInputBorder(),
+  ),
+  value: branchController.text.isEmpty
+      ? null
+      : branchController.text,
+  items: branches.map((branch) {
+    return DropdownMenuItem(
+      value: branch,
+      child: Text(branch),
+    );
+  }).toList(),
+  onChanged: (value) {
+    setState(() {
+      branchController.text = value!;
+    });
+  },
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select branch';
+    }
+    return null;
+  },
+),
+
+              const SizedBox(height: 15),
+
+              ElevatedButton(
+                onPressed: addStudent,
+                child: const Text('Add Student'),
+              ),
+
+              const SizedBox(height: 25),
+
+              const Text(
+                'Student List',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              
+              const SizedBox(height: 10),
+
+TextField(
+  controller: searchController,
+  decoration: const InputDecoration(
+    labelText: 'Search Student',
+    prefixIcon: Icon(Icons.search),
+    border: OutlineInputBorder(),
+  ),
+  onChanged: (value) {
+    setState(() {
+      searchText = value.toLowerCase();
+    });
+  },
+),
+
+const SizedBox(height: 15),
+
+              ...students
+    .where(
+      (student) =>
+          student.name.toLowerCase().contains(searchText) ||
+          student.rollNumber.toLowerCase().contains(searchText),
+    )
+    .map(
+                (student) => Card(
+                  child: ListTile(
+                    title: Text(student.name),
+                 subtitle: Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text('${student.rollNumber} • ${student.branch}'),
+    Text(
+      'Present: ${student.presentDays} / ${student.totalDays} days',
+    ),
+    Text(
+      'Attendance: ${attendancePercentage(student).toStringAsFixed(1)}%',
+    ),
+   Text(
+  student.isPresent ? 'Status: Present' : 'Status: Absent',
+  style: TextStyle(
+    fontWeight: FontWeight.bold,
+    color: student.isPresent ? Colors.green : Colors.red,
+  ),
+),
+  ],
+),
+                  trailing: Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    IconButton(
+      icon: const Icon(Icons.check),
+      onPressed: () {
+        markAttendance(student, true);
+      },
+    ),
+    IconButton(
+      icon: const Icon(Icons.close),
+      onPressed: () {
+        markAttendance(student, false);
+      },
+    ),
+    IconButton(
+      icon: const Icon(Icons.edit),
+      onPressed: () {
+        editStudent(student);
+      },
+    ),
+    IconButton(
+      icon: const Icon(Icons.delete),
+      onPressed: () {
+        deleteStudent(student);
+      },
+    ),
+  ],
+),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+  @override
+void dispose() {
+  nameController.dispose();
+  rollController.dispose();
+  branchController.dispose();
+  searchController.dispose();
+  super.dispose();
+}
 }
