@@ -9,13 +9,17 @@ class Student {
   String rollNumber;
   String branch;
   bool isPresent;
+  int presentDays;
+  int totalDays;
 
   Student({
-    required this.name,
-    required this.rollNumber,
-    required this.branch,
-    this.isPresent = false,
-  });
+  required this.name,
+  required this.rollNumber,
+  required this.branch,
+  this.isPresent = false,
+  this.presentDays = 0,
+  this.totalDays = 0,
+});
 }
 
 class StudentAttendanceApp extends StatelessWidget {
@@ -57,6 +61,24 @@ class _HomeScreenState extends State<HomeScreen> {
       branch: 'CSE',
     ),
   ];
+ double attendancePercentage(Student student) {
+  if (student.totalDays == 0) {
+    return 0;
+  }
+
+  return (student.presentDays / student.totalDays) * 100;
+}
+void markAttendance(Student student, bool present) {
+  setState(() {
+    student.totalDays++;
+
+    if (present) {
+      student.presentDays++;
+    }
+
+    student.isPresent = present;
+  });
+}
 void deleteStudent(Student student) {
   setState(() {
     students.remove(student);
@@ -252,12 +274,25 @@ void deleteStudent(Student student) {
                 (student) => Card(
                   child: ListTile(
                     title: Text(student.name),
-                    subtitle: Text(
-                      '${student.rollNumber} • ${student.branch}',
-                    ),
-                   trailing: Row(
+                   subtitle: Text(
+  '${student.rollNumber} • ${student.branch}\n'
+  'Attendance: ${attendancePercentage(student).toStringAsFixed(1)}%',
+),
+                  trailing: Row(
   mainAxisSize: MainAxisSize.min,
   children: [
+    IconButton(
+      icon: const Icon(Icons.check),
+      onPressed: () {
+        markAttendance(student, true);
+      },
+    ),
+    IconButton(
+      icon: const Icon(Icons.close),
+      onPressed: () {
+        markAttendance(student, false);
+      },
+    ),
     IconButton(
       icon: const Icon(Icons.edit),
       onPressed: () {
