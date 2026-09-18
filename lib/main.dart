@@ -43,6 +43,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   final _formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -388,4 +389,12 @@ const SizedBox(height: 15),
       ),
     );
   }
+  @override
+void dispose() {
+  nameController.dispose();
+  rollController.dispose();
+  branchController.dispose();
+  searchController.dispose();
+  super.dispose();
+}
 }
