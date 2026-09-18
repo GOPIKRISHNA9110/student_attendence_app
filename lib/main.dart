@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
 
             const Text(
               'Student List',
@@ -159,6 +159,65 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AttendanceScreen(),
+                    ),
+                  );
+                },
+                child: const Text('View Attendance'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AttendanceScreen extends StatelessWidget {
+  const AttendanceScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Attendance'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Attendance Records',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            const Text(
+              'Gopi Krishna - CSE001',
+              style: TextStyle(fontSize: 18),
+            ),
+
+            const SizedBox(height: 20),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Back'),
             ),
           ],
         ),
