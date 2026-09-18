@@ -4,6 +4,20 @@ void main() {
   runApp(const StudentAttendanceApp());
 }
 
+class Student {
+  String name;
+  String rollNumber;
+  String branch;
+  bool isPresent;
+
+  Student({
+    required this.name,
+    required this.rollNumber,
+    required this.branch,
+    this.isPresent = false,
+  });
+}
+
 class StudentAttendanceApp extends StatelessWidget {
   const StudentAttendanceApp({super.key});
 
@@ -25,15 +39,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isPresent = false;
+  final _formKey = GlobalKey<FormState>();
 
-  final List<String> students = [
-    'Gopi Krishna - CSE001',
-    'Rahul - CSE002',
-    'Suresh - CSE003',
+  final List<Student> students = [
+    Student(
+      name: 'Gopi Krishna',
+      rollNumber: 'CSE001',
+      branch: 'CSE',
+    ),
+    Student(
+      name: 'Rahul',
+      rollNumber: 'CSE002',
+      branch: 'CSE',
+    ),
+    Student(
+      name: 'Suresh',
+      rollNumber: 'CSE003',
+      branch: 'CSE',
+    ),
   ];
 
-  final _formKey = GlobalKey<FormState>();
+  bool isPresent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,21 +111,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Name:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  'Gopi Krishna',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    'Name:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Text(
+                    'Gopi Krishna',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
 
               const SizedBox(height: 15),
 
@@ -119,21 +145,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 15),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Branch:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  'CSE',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    'Branch:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Text(
+                    'CSE',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
 
-            const SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               Center(
                 child: Text(
@@ -171,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
 
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
 
               const Text(
                 'Student List',
@@ -186,13 +212,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ...students.map(
                 (student) => Card(
                   child: ListTile(
-                    title: Text(student),
-                    subtitle: const Text('Attendance Record'),
+                    title: Text(student.name),
+                    subtitle: Text(
+                      '${student.rollNumber} • ${student.branch}',
+                    ),
+                    trailing: Text(
+                      student.isPresent ? 'Present' : 'Absent',
+                    ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
 
               Center(
                 child: ElevatedButton(
@@ -256,7 +287,7 @@ class AttendanceScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             const Text(
-              'Gopi Krishna - CSE001',
+              'Student attendance details',
               style: TextStyle(fontSize: 18),
             ),
 
