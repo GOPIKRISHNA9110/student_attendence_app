@@ -33,6 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
     'Suresh - CSE003',
   ];
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,139 +46,186 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Student Details',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(15),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        'Name:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Text(
-                        'Gopi Krishna',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-
-            const SizedBox(height: 15),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Roll No:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  'CSE001',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 15),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        'Branch:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Text(
-                        'CSE',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-
-            const SizedBox(height: 20),
-
-            Center(
-              child: Text(
-                isPresent
-                    ? 'Attendance: Present'
-                    : 'Attendance: Absent',
-                style: const TextStyle(
-                  fontSize: 18,
+              child: const Text(
+                'Student Details',
+                style: TextStyle(
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
 
+              const SizedBox(height: 20),
+
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Student Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+
             const SizedBox(height: 15),
 
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Roll Number',
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 15),
+
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Branch',
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Present'),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  'Name:',
+                  style: TextStyle(fontSize: 18),
                 ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Absent'),
+                Text(
+                  'Gopi Krishna',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+
+              const SizedBox(height: 15),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    'Roll No:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Text(
+                    'CSE001',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 15),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  'Branch:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  'CSE',
+                  style: TextStyle(fontSize: 18),
                 ),
               ],
             ),
 
             const SizedBox(height: 15),
 
-            const Text(
-              'Student List',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              Center(
+                child: Text(
+                  isPresent
+                      ? 'Attendance: Present'
+                      : 'Attendance: Absent',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
+
+              const SizedBox(height: 15),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isPresent = true;
+                    });
+                  },
+                  child: const Text('Present'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isPresent = false;
+                    });
+                  },
+                  child: const Text('Absent'),
+                ),
+              ],
             ),
 
-            const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
-            Expanded(
-              child: ListView.builder(
-                itemCount: students.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text(students[index]),
-                      subtitle: const Text('Attendance Record'),
-                    ),
-                  );
-                },
+              const Text(
+                'Student List',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
 
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AttendanceScreen(),
-                    ),
-                  );
-                },
-                child: const Text('View Attendance'),
+              ...students.map(
+                (student) => Card(
+                  child: ListTile(
+                    title: Text(student),
+                    subtitle: const Text('Attendance Record'),
+                  ),
+                ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 15),
+
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Student details are valid'),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Submit Student'),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AttendanceScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('View Attendance'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
