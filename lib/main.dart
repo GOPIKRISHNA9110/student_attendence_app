@@ -17,8 +17,15 @@ class StudentAttendanceApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool isPresent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -92,24 +99,20 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 25),
+            const SizedBox(height: 25),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('Present'),
-                      ),
-
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('Absent'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Present'),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Absent'),
+                ),
+              ],
             ),
           ],
         ),
