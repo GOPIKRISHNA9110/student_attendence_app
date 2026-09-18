@@ -59,7 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
-  bool isPresent = false;
+  void markAttendance(Student student, bool present) {
+    setState(() {
+      student.isPresent = present;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,62 +108,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 15),
 
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Branch',
-                border: OutlineInputBorder(),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Branch',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter branch';
+                  }
+                  return null;
+                },
               ),
-            ),
 
               const SizedBox(height: 20),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'Name:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Text(
-                    'Gopi Krishna',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 15),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'Roll No:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Text(
-                    'CSE001',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 15),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'Branch:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Text(
-                    'CSE',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 15),
 
               Center(
                 child: Text(
@@ -183,14 +145,41 @@ class _HomeScreenState extends State<HomeScreen> {
                       setState(() {
                         isPresent = true;
                       });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Student marked Present'),
+                        ),
+                      );
                     },
                     child: const Text('Present'),
                   ),
+
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
                         isPresent = false;
                       });
+
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Attendance'),
+                            content: const Text(
+                              'Student has been marked Absent.',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     child: const Text('Absent'),
                   ),
@@ -216,8 +205,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     subtitle: Text(
                       '${student.rollNumber} • ${student.branch}',
                     ),
-                    trailing: Text(
-                      student.isPresent ? 'Present' : 'Absent',
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          student.isPresent ? 'Present' : 'Absent',
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                markAttendance(student, true);
+                              },
+                              icon: const Icon(Icons.check),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                markAttendance(student, false);
+                              },
+                              icon: const Icon(Icons.close),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -248,7 +260,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AttendanceScreen(),
+                        builder: (context) => AttendanceScreen(
+                          students: students,
+                        ),
                       ),
                     );
                   },
@@ -264,7 +278,12 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class AttendanceScreen extends StatelessWidget {
-  const AttendanceScreen({super.key});
+  final List<Student> students;
+
+  const AttendanceScreen({
+    super.key,
+    required this.students,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -272,35 +291,21 @@ class AttendanceScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Attendance'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Attendance Records',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      body: ListView.builder(
+        itemCount: students.length,
+        itemBuilder: (context, index) {
+          final student = students[index];
+
+          return Card(
+            child: ListTile(
+              title: Text(student.name),
+              subtitle: Text(student.rollNumber),
+              trailing: Text(
+                student.isPresent ? 'Present' : 'Absent',
               ),
             ),
-
-            const SizedBox(height: 20),
-
-            const Text(
-              'Student attendance details',
-              style: TextStyle(fontSize: 18),
-            ),
-
-            const SizedBox(height: 20),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Back'),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
