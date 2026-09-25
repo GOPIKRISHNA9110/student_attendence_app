@@ -108,7 +108,8 @@ Commit 14 — Add student edit feature
 
 Added functionality to edit student name, roll number, and branch.
 
-Screenshot
+<img width="1267" height="183" alt="image" src="https://github.com/user-attachments/assets/fec1fbb1-be1a-4689-8b42-e791f0793de5" />
+
 
 
 
@@ -117,6 +118,7 @@ Commit 15 — Add student delete feature
 
 Added functionality to delete students from the student list.
 
+<img width="1267" height="183" alt="image" src="https://github.com/user-attachments/assets/2de3dfcb-ca13-4d64-a3fd-f8523dc5813e" />
 
 
 
@@ -127,6 +129,7 @@ Commit 16 — Add attendance percentage calculation
 Added automatic attendance percentage calculation based on present days and total days.
 
 
+<img width="211" height="100" alt="Screenshot 2026-09-25 211358" src="https://github.com/user-attachments/assets/93b3d688-bee8-4c12-8e2f-185265d76951" />
 
 
 
@@ -136,6 +139,7 @@ Commit 17 — Add student search feature
 Added case-insensitive search functionality using student name or roll number.
 
 
+<img width="1250" height="172" alt="Screenshot 2026-09-25 211206" src="https://github.com/user-attachments/assets/ccac2e10-4f90-4453-b077-f508d80484b8" />
 
 
 
@@ -148,7 +152,7 @@ ECE
 EEE
 MECH
 CIVIL
-Screenshot
+
 
 
 
@@ -164,12 +168,15 @@ Current Present/Absent status
 Green status for Present
 Red status for Absent
 
+<img width="1267" height="183" alt="Screenshot 2026-09-25 211507" src="https://github.com/user-attachments/assets/0e1b7ae8-d735-4798-80cd-e1b64b9c4c09" />
+
 
 
 
 Commit 20 — Final UI & App Structure
 
 Finalized the application structure and added proper disposal of the text controllers using dispose().
+<img width="1254" height="1254" alt="image" src="https://github.com/user-attachments/assets/358fd433-2b8a-4c24-8083-2ea7453dc55c" />
 
 
 
