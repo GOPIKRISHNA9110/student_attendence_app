@@ -54,11 +54,13 @@ Improved the student layout using Container and Padding.
 Commit 4 — Add attendance buttons
 
 Added buttons for marking a student's attendance.
+<img width="1264" height="109" alt="image" src="https://github.com/user-attachments/assets/0a11d247-089f-4c65-baf6-587ecfd55572" />
 
 
 Commit 5 — Add student input fields
 
 Added input fields for entering student name and roll number.
+<img width="1272" height="318" alt="Screenshot 2026-09-25 212853" src="https://github.com/user-attachments/assets/1317d095-bc12-4082-a211-738828702ae8" />
 
 
 Commit 6 — Implement attendance state management
@@ -84,6 +86,8 @@ Added form validation to ensure required student details are entered.
 Commit 10 — Add attendance confirmation messages
 
 Added SnackBar messages to confirm attendance-related actions.
+<img width="1257" height="182" alt="image" src="https://github.com/user-attachments/assets/f185e329-d017-4f66-813e-07a2030015b0" />
+
 
 
 Commit 11 — Add Student data model
@@ -94,12 +98,14 @@ Created the Student data model to represent student information and attendance d
 Commit 12 — Implement student attendance tracking
 
 Implemented tracking of present days and total attendance days.
+<img width="1262" height="450" alt="Screenshot 2026-09-25 212744" src="https://github.com/user-attachments/assets/93340580-1cc1-4b9b-85a4-d3eb2096f7bf" />
 
 
 Commit 13 — Implement student registration
 
 Implemented functionality for registering and adding students to the student list.
 
+<img width="1282" height="682" alt="Screenshot 2026-09-25 212520" src="https://github.com/user-attachments/assets/9cfdf550-b28f-4ac6-aa1e-3ab1918e1546" />
 
 
 
@@ -118,7 +124,7 @@ Commit 15 — Add student delete feature
 
 Added functionality to delete students from the student list.
 
-<img width="1267" height="183" alt="image" src="https://github.com/user-attachments/assets/2de3dfcb-ca13-4d64-a3fd-f8523dc5813e" />
+<img width="1267" height="183" alt="image" src="https://github.com/user-attachments/assets/53ad5db2-d947-432c-9961-43ad3922a6c5" />
 
 
 
@@ -152,6 +158,7 @@ ECE
 EEE
 MECH
 CIVIL
+<img width="1280" height="350" alt="Screenshot 2026-09-25 212418" src="https://github.com/user-attachments/assets/96bfc1f5-ac9a-4948-9152-00cbb4031cbb" />
 
 
 
